@@ -9,10 +9,10 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'price', 'category_id'];
+    protected $fillable = ['name', 'description', 'price', 'category'];
 
-    public function category()
+    public function scopeCategory($query, $category)
     {
-        return $this->belongsTo(Category::class);
+        return $query->where('category', $category);
     }
 }

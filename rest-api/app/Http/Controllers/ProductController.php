@@ -14,7 +14,14 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $product = Product::create($request->all());
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'category' => 'required|string|max:255',
+        ]);
+
+        $product = Product::create($validatedData);
         return response()->json($product, 201);
     }
 
@@ -25,7 +32,14 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $product->update($request->all());
+        $validatedData = $request->validate([
+            'name' => 'string|max:255',
+            'description' => 'string',
+            'price' => 'numeric|min:0',
+            'category' => 'string|max:255',
+        ]);
+
+        $product->update($validatedData);
         return response()->json($product);
     }
 
@@ -37,9 +51,7 @@ class ProductController extends Controller
 
     public function byCategory($category)
     {
-        $products = Product::whereHas('category', function ($query) use ($category) {
-            $query->where('name', $category);
-        })->get();
+        $products = Product::category($category)->get();
         return response()->json($products);
     }
 }

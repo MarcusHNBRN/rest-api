@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CsrfController;
+
+Route::get('/csrf', [CsrfController::class, 'getToken']);
 
 Route::middleware('log.changes')->group(function () {
     Route::get('/products', [ProductController::class, 'index']);
